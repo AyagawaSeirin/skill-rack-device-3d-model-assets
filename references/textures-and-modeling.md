@@ -1,4 +1,4 @@
-# Six-face textures and simplified GLB modeling
+# Exact six-face textures and exterior GLB modeling
 
 Use this guide after the target matrix, evidence records, and dimension ledger are complete.
 
@@ -21,25 +21,29 @@ Avoid negative node scales and mirrored parent transforms. Apply transforms befo
 
 ## 2. Produce six canonical face assets
 
-Choose the least generative path:
+Choose the least generative and most source-preserving path:
 
 1. isolate and perspective-correct an exact orthographic photograph;
-2. use reference-preserving image editing with several exact-model views and a mechanical checklist;
-3. use official drawings or optional official 3D renders to constrain geometry and feature placement while still producing a new simplified model;
-4. stop if only family-level or contradictory evidence exists.
+2. composite unobstructed regions from exact photos of the same installed configuration;
+3. bake/project exact photographic color from verified geometry;
+4. use tightly constrained reference-preserving image editing for background, margins, perspective, or small occlusions only;
+5. use official drawings or optional official 3D renders to constrain geometry and feature placement while still producing a new model;
+6. stop if only family-level or contradictory evidence exists.
 
-When raster generation/editing is required, use the available image-generation skill/tool with the original exact-device images attached. Do not ask for a face from only a model name. For a hidden surface, attach the official three-quarter views or diagrams that jointly prove its features. If local background removal damages edges or holes, regenerate/edit from the original source instead of repeatedly eroding the derivative.
+When raster editing is required, use the available image-generation skill/tool with original exact-device images attached. Do not ask it to redesign or freely regenerate an entire device face. Do not prompt from only a model name. For a hidden surface, attach all exact-configuration views and diagrams that jointly prove its features. If the edit changes counts, proportions, seams, logo, text, materials, ports, or relief, discard it. If local background removal damages edges or holes, edit again from the original source rather than eroding a derivative.
 
 For each view, require:
 
 - one straight orthographic face, no visible adjacent face or perspective;
 - exact verified feature layout and silhouette;
+- exact component count, row/column arrangement, spacing, seams, recesses, and protrusions from the feature inventory;
 - neutral lighting, no cast shadow or floor;
+- photoreal source-derived materials with no toon outline, illustration shading, or generic color blocks;
 - readable factory logo/model text in the source orientation;
 - transparent external background where needed;
 - alpha `255` over all visible chassis pixels, including black vents and ports;
 - alpha `0` only outside the product and within verified through-holes;
-- no annotation, watermark, reseller sticker, cable, rail, or detached fragment.
+- no annotation, watermark, reseller sticker, cable, rail, detached fragment, pseudo-text, invented display, invented indicator, or decorative port.
 
 ## 3. Preserve physical aspect ratio and resolution
 
@@ -56,7 +60,7 @@ Do not resize width and height independently. Crop transparent margins before ev
 
 Unless the project specifies another budget, use at least 2048 px on the long edge for front/rear and at least 1536 px on the long edge for the other faces. Increase resolution for dense port labels or small ear holes. Keep texel density reasonably consistent across adjacent faces and generate mipmaps during web optimization.
 
-The `scripts/audit_views.py` helper checks filenames, resolution, aspect ratios, and suspicious alpha in the opaque core. It does not prove model identity or correct orientation.
+The `scripts/audit_views.py` helper checks filenames, resolution, aspect ratios, and suspicious alpha in the opaque core. It does not prove model identity, installed configuration, visual fidelity, or correct orientation.
 
 ## 4. Rack-ear geometry and holes
 
@@ -71,17 +75,21 @@ Model the chassis body and rack ears separately.
 
 Never use an alpha-masked full front or rear plane to make ear holes; it can also open vents, logos, labels, and chassis pixels and reveal the model interior.
 
-## 5. Simplified geometry
+## 5. Exact visible geometry
 
-Website simplification may use a beveled closed body plus shallow relief for major panels. Preserve:
+Model the complete visible exterior represented by the feature inventory. Use separate geometry for any part that creates identifiable silhouette, parallax, occlusion, seam depth, recess, protrusion, or cast shadow in an approved orthographic or three-quarter view. Preserve:
 
 - verified overall body proportions and silhouette;
 - front and rear planes at their true offsets;
 - front-only or real rear mounting hardware;
 - large handles, bezels, air ducts, raised covers, and other silhouette-changing parts;
 - major side/top/bottom seams or vents visible in official views.
+- every installed sled/module boundary, blanking panel, drive bay or carrier recess, visible PSU/fan block, control area, and large port group;
+- the real thickness, depth ordering, and gaps of handles, bezels, latches, rack ears, and stepped panels.
 
-It may omit independently removable drives, fans, and PSUs when the user only needs an overall display, but their visible face layout must remain correct in the texture or shallow geometry.
+Do not omit a component because it is removable. If it is externally visible in the requested installed configuration, it must appear with the correct count, shape, position, and depth. A single beveled box with six decorative planes is forbidden when the real device is multi-part.
+
+Fine flush labels may remain texture detail. Dense perforation may use real geometry, a normal/height treatment, or an opaque high-resolution texture only if the actual-GLB comparison at target viewing distance is indistinguishable from the source. Do not use flat black dots as a substitute when perforation depth or through-visibility is visibly important.
 
 Use a watertight or visually closed body, outward normals, and `doubleSided: false` by default. Prevent z-fighting by avoiding coplanar duplicate face planes. Do not leave gaps behind front/rear texture cards.
 
@@ -101,7 +109,7 @@ Reject:
 
 ## 7. Materials and color
 
-For photo-derived face textures intended to look like the approved PNGs:
+For photo-derived face textures intended to match the approved PNGs:
 
 - mark base-color textures as sRGB;
 - use `baseColorFactor: [1, 1, 1, 1]`;
@@ -109,6 +117,7 @@ For photo-derived face textures intended to look like the approved PNGs:
 - prefer `KHR_materials_unlit` for a consistent product-photo appearance across website viewers;
 - if PBR is required, normally use `metallicFactor: 0` for painted chassis/photo cards, a plausible roughness, neutral lighting, and no double application of baked lighting or color correction;
 - do not compensate for a dark/gray export by brightening textures blindly.
+- do not use toon/cel shaders, outline passes, posterization, vectorized edges, or flat illustrative color regions.
 
 Use `MASK` only on a separate verified perforated part when geometry is impractical; choose a cutoff that preserves anti-aliased edges. Avoid `BLEND` for main equipment faces because sorting and partial alpha can expose the interior.
 
@@ -120,13 +129,16 @@ Do not copy its mesh or substitute it for the new build unless the user explicit
 
 ## 9. Web export
 
-Optimization is target-driven:
+Optimization is target-driven and may not alter the exterior comparison:
 
 - remove unused nodes/materials/images;
 - merge only parts that do not require distinct transforms or materials;
 - use quantization, mesh compression, or KTX2 only when target viewers support them;
 - retain readable branding and sufficient texture resolution;
 - compare web and standard renders from the same cameras;
+- compare both against the exact reference views after every material or compression change;
 - keep the editable/source model and prior GLB version unchanged.
+
+Remove only invisible internals and redundant topology. Do not remove visible modules, bays, PSUs, fans, handles, seams, or relief, and do not merge distinct assemblies if their separation is visible.
 
 Deliver a self-contained GLB unless the website pipeline explicitly expects external resources.

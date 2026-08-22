@@ -1,4 +1,4 @@
 interface:
   display_name: "Rack Device 3D Assets"
-  short_description: "Build exact-model GLBs from verified six-face evidence"
-  default_prompt: "Use $skill-rack-device-3d-model-assets to research, build, and validate an exact-model rack device GLB for website display."
+  short_description: "Build exact-appearance GLBs from real-device evidence"
+  default_prompt: "Use $skill-rack-device-3d-model-assets to build and validate an exact-appearance exterior replica GLB of a verified rack-device configuration."
