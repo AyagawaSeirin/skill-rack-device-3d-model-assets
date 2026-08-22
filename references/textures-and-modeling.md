@@ -19,24 +19,33 @@ Name views from the device's physical perspective. A rear view naturally reverse
 
 Avoid negative node scales and mirrored parent transforms. Apply transforms before export and keep outward normals consistent.
 
-## 2. Produce six canonical face assets
+## 2. Generate six canonical transparent assets with GPT image generation
 
-Choose the least generative and most source-preserving path:
+Using online/PDF material as references is mandatory, but cropping and background removal alone are not the final production method. Use the `imagegen` skill and built-in `image_gen` tool by default to generate the six canonical face assets.
 
-1. isolate and perspective-correct an exact orthographic photograph;
-2. composite unobstructed regions from exact photos of the same installed configuration;
-3. bake/project exact photographic color from verified geometry;
-4. use tightly constrained reference-preserving image editing for background, margins, perspective, or small occlusions only;
-5. use official drawings or optional official 3D renders to constrain geometry and feature placement while still producing a new model;
-6. stop if only family-level or contradictory evidence exists.
+For every face:
 
-When raster editing is required, use the available image-generation skill/tool with original exact-device images attached. Do not ask it to redesign or freely regenerate an entire device face. Do not prompt from only a model name. For a hidden surface, attach all exact-configuration views and diagrams that jointly prove its features. If the edit changes counts, proportions, seams, logo, text, materials, ports, or relief, discard it. If local background removal damages edges or holes, edit again from the original source rather than eroding a derivative.
+1. collect multiple exact-configuration sources from official pages/PDFs and, when needed, Browser-assisted or cross-checked third-party/commerce pages;
+2. download source images and render relevant PDF pages to PNG;
+3. inspect every local input with `view_image` at high/original detail before generation;
+4. label each input role explicitly, for example `Image 1: binding face reference`, `Image 2: binding three-quarter geometry reference`, `Image 3: material/color reference`, `Image 4: technical diagram`;
+5. invoke built-in `image_gen` once for that face, treating the inputs as identity/geometry references and requesting a new exact orthographic face asset;
+6. request a genuinely transparent external background and preserve generated alpha;
+7. inspect the output with `view_image`, compare it to the feature inventory and every binding source, and reject drift;
+8. iterate with one targeted correction while repeating all identity invariants;
+9. copy the selected project-bound output into `views/<face>.png` and record the final prompt, input roles, generation method, and output path.
+
+Use reference-guided `product-mockup` generation for a new orthographic face. An exact source photo may also be an edit target for perspective/background work, but the workflow must still invoke image generation and validate the generated result. Do not prompt from only a model name. Do not use a single freely generated image to infer other faces.
+
+Use one built-in call per face; do not collapse six different assets into one batch prompt or use `n` as a substitute. The built-in path is the default and supports transparent output. If it is unavailable, explain the explicit CLI fallback and its API-key requirement; use it only if the user confirms.
+
+For third-party photos, exclude seller backgrounds, cables, rails, shipping damage, inventory labels, and non-factory stickers through the reference-guided generation prompt. Do not “clean up” a configuration difference into the requested model. For `GENERIC_BOTTOM_FALLBACK`, feed inspected fallback references to image generation and require a conservative non-identifying underside; never generate a detailed imaginary bottom from text alone.
 
 For each view, require:
 
 - one straight orthographic face, no visible adjacent face or perspective;
-- exact verified feature layout and silhouette;
-- exact component count, row/column arrangement, spacing, seams, recesses, and protrusions from the feature inventory;
+- exact verified feature layout and silhouette, except the documented bottom fallback which must preserve all silhouette-affecting evidence;
+- exact component count, row/column arrangement, spacing, seams, recesses, and protrusions from the feature inventory; a bottom fallback stays intentionally non-identifying rather than inventing detail;
 - neutral lighting, no cast shadow or floor;
 - photoreal source-derived materials with no toon outline, illustration shading, or generic color blocks;
 - readable factory logo/model text in the source orientation;
@@ -44,6 +53,20 @@ For each view, require:
 - alpha `255` over all visible chassis pixels, including black vents and ports;
 - alpha `0` only outside the product and within verified through-holes;
 - no annotation, watermark, reseller sticker, cable, rail, detached fragment, pseudo-text, invented display, invented indicator, or decorative port.
+
+Use this prompt scaffold for each face:
+
+```text
+Use case: product-mockup
+Asset type: exact rack-device [FACE] texture for GLB
+Input images: [LABEL EACH BINDING REFERENCE AND ROLE]
+Primary request: generate a new exact [FACE] orthographic view of [EXACT PID AND INSTALLED CONFIGURATION] from the binding references
+Scene/backdrop: genuinely transparent background
+Style/medium: photoreal product photography, source-matched materials, not illustration or generic 3D concept art
+Composition/framing: one complete face, perfectly straight-on, no adjacent face, physical ratio [A:B]
+Constraints: preserve [FEATURE INVENTORY]; keep factory logo/text location and orientation; product pixels fully opaque; only verified through-holes transparent; no seller labels, cables, rails, watermark, shadow, pseudo-text, invented parts, mirroring, repetition, or redesign
+Avoid: generic server details, family substitution, vectorized edges, toon shading, fake displays/LEDs/ports, changed component counts
+```
 
 ## 3. Preserve physical aspect ratio and resolution
 

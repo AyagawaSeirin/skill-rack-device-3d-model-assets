@@ -11,7 +11,7 @@ The model must match the requested real installed device configuration in every 
 - row/column structure, spacing, recess/protrusion, and left/right order;
 - port families, grilles, vents, seams, fasteners, latches, rack ears, and through-holes;
 - factory colors, surface finish, logo, model badge, and readable markings;
-- appearance from all six orthographic views and every authoritative three-quarter view.
+- appearance from all verified orthographic and authoritative three-quarter views, with only the documented generic-bottom fallback exception.
 
 The result must look like the same photographed device, not merely the same equipment category or product family. “Web-ready” describes format and performance only.
 
@@ -38,18 +38,6 @@ status: VERIFIED | BLOCKED
 
 Do not infer an enclosure from a module name. Do not invent an installed node count or combine incompatible front and rear options.
 
-### C6420 failure-prevention example
-
-Dell's official C6420 specification describes a 2U platform with up to four C6420 compute nodes. The host is the C6400 chassis, and the visible assembly changes with the backplane option. The same document lists, among other options:
-
-- 24 × 2.5-inch Direct Backplane, up to 6 drives per C6420 sled;
-- 24 × 2.5-inch Expander Backplane, up to 12 drives per sled and 2 C6420 sleds per C6400 chassis;
-- 24 × 2.5-inch NVMe Backplane with a specified NVMe/SAS/SATA mix per sled;
-- 12 × 3.5-inch Direct Backplane, up to 3 drives per sled;
-- no-backplane configuration.
-
-Therefore `C6420` alone is insufficient. Lock the C6400 enclosure, backplane, drive layout, sled count, and rear configuration before modeling. Source: [Dell EMC PowerEdge C6420 Spec Sheet](https://i.dell.com/sites/doccontent/shared-content/data-sheets/en/Documents/PowerEdge_C6420_Spec_Sheet.pdf).
-
 ## 3. Visible-feature inventory gate
 
 Create one row per visible component group before building:
@@ -61,21 +49,37 @@ position,depth_or_relief,color_material,source_url,confidence
 
 Enumerate rather than summarize. “Front has drives and vents” is insufficient; record exact counts, carrier style, row/column layout, status-panel side, handle shape, and blanking panels. For a modular enclosure, enumerate every installed and empty slot.
 
-Do not start modeling while any major visible row has `confidence` below verified. Missing evidence becomes `BLOCKED`.
+Do not start modeling while any major identity-bearing visible row has `confidence` below verified. The only exception is a bottom row explicitly marked `GENERIC_BOTTOM_FALLBACK` after the required search escalation.
 
 ## 4. Source-lock rule
 
-The approved exact-device sources are binding. Prefer operations that change the fewest factual pixels:
+The approved exact-device web images, inspected PDF-page renders, and third-party sources are binding references. Prepare them with operations that change the fewest factual pixels:
 
 1. crop, rectify, and isolate an exact photo;
 2. composite unobstructed regions from multiple exact photos of the same configuration;
 3. bake or project exact-source color onto verified geometry;
-4. use reference-preserving image editing only for perspective correction, missing margins, background, or small occlusions;
+4. render relevant PDF pages and isolate the applicable figure or equipment view;
 5. reject prompt-only or family-reference generation.
 
-Image generation must not redesign the device. Discard an output if it introduces pseudo-text, new ports, decorative indicators, repeated patterns, changed component counts, mirrored branding, invented panel seams, or illustration-like surfaces.
+Reference preparation is not the final face-asset workflow. For each canonical face, invoke the `imagegen` skill and built-in image-generation tool using the inspected sources as labeled inputs. Generate one orthographic transparent-background PNG per call. A direct crop or locally removed background alone is insufficient.
 
-## 5. Geometry fidelity rule
+Image generation must reconstruct the same real device rather than redesign it. Preserve the identity/feature inventory as invariants. Discard and regenerate an output if it introduces pseudo-text, new ports, decorative indicators, repeated patterns, changed component counts, mirrored branding, invented panel seams, opaque background, transparent chassis pixels, or illustration-like surfaces. Keep the final prompt, input-role list, and selected output path in the evidence/QA record.
+
+## 5. Controlled generic-bottom fallback
+
+Use this exception only when all of the following are true:
+
+- exact-model official documents, media, videos, 3D viewers, and service material were searched;
+- interactive/dynamic pages were inspected with the available Browser skill where useful;
+- exact-model reseller, marketplace, auction, used-equipment, review, teardown, and local-language searches were attempted;
+- no usable exact underside view remains;
+- front, rear, left, right, top, installed configuration, dimensions, and all silhouette-affecting bottom features are otherwise verified.
+
+Select fallback reference material in this order: same model family, same vendor and chassis generation, same U height/form factor, then a neutral generic rack-device underside. Inspect the fallback images, label their role, and use them with built-in image generation to create the final transparent `bottom.png`. Match verified width:depth ratio, sheet-metal color, finish, and edge treatment. Do not mirror the top or invent labels, logos, vents, holes, feet, rails, seams, fasteners, or protrusions. Preserve any bottom-edge or rail feature already proven by side/three-quarter references.
+
+Record the source and search log as `GENERIC_BOTTOM_FALLBACK`, keep `bottom.png` for pipeline compatibility, and set final status to `PASS_WITH_BOTTOM_FALLBACK`. This exception applies only to the bottom face and does not relax exactness for geometry, silhouette, or any other face.
+
+## 6. Geometry fidelity rule
 
 Use geometry wherever a feature creates visible silhouette, parallax, occlusion, seam depth, recess, protrusion, or cast shadow in the target website cameras. This normally includes separate sleds/modules, drive carriers or bay recesses, handles, bezels, rack ears, large ports, fan/PSU blocks, raised covers, and stepped chassis panels.
 
@@ -83,7 +87,7 @@ Fine flush printing may remain in a texture. Dense perforation may use geometry,
 
 A single beveled cuboid with six decorative planes is forbidden when source views show multi-part construction or relief.
 
-## 6. Allowed and forbidden web optimization
+## 7. Allowed and forbidden web optimization
 
 Allowed when reference renders remain unchanged:
 
@@ -102,14 +106,14 @@ Forbidden:
 - replacing photo-real color with vector, toon, cel-shaded, or flat-color art;
 - reducing texture resolution until labels, hole edges, grilles, or port structure become synthetic.
 
-## 7. Immediate rejection conditions
+## 8. Immediate rejection conditions
 
 Reject before delivery if any view shows:
 
 - a generic server shape unrelated to the exact source;
 - wrong module/sled/drive count or nonexistent assembly;
 - invented controls, displays, ports, labels, LEDs, or branding;
-- copied/mirrored left-right layouts or duplicated top/bottom faces;
+- copied/mirrored left-right layouts or a bottom copied from the top; a documented conservative generic-bottom fallback is allowed, but never a mirrored top;
 - cartoon outlines, flat illustration shading, exaggerated bevels, or artificial color blocks;
 - large blank panels where the real device has distinct mechanical structure;
 - texture-only details that should create visible depth in a three-quarter view;

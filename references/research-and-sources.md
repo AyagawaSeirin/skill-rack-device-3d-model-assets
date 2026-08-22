@@ -44,6 +44,7 @@ The requested workflow constructs a new exact-appearance exterior model. During 
 - `site:<vendor-domain> "<exact PID>" 3D`, `AR`, `GLB`, `glTF`, `CAD`, `STEP`, `OBJ`, `FBX`
 - `site:<vendor-domain> "<exact PID>" dimensions`
 - `site:<vendor-domain> "<exact PID>" hardware installation guide PDF`
+- `site:<vendor-domain> "<exact PID>" datasheet PDF`, `whitepaper PDF`, `owner manual PDF`, `installation PDF`
 - `"<exact PID>" front rear side top`
 
 An official interactive viewer can load a GLB or glTF that is not exposed as a visible download button. Inspect its public network resources when permitted, but do not bypass authentication, access controls, licensing checks, or private APIs. Record the viewer page and direct public asset URL. If downloaded, preserve the original file, byte size, and SHA-256 checksum.
@@ -52,14 +53,27 @@ Report an exact official model as an optional alternative and potentially author
 
 Do not call an AI reconstruction “official.”
 
-## 4. Evidence hierarchy for the new build
+## 4. Escalate with Browser and third-party sources
+
+Do not conclude that imagery is unavailable merely because ordinary search results or official page text are sparse.
+
+1. Use the available connector, search/API, or direct download path when it can retrieve the semantic content.
+2. When an official or third-party page is JavaScript-rendered, interactive, gallery-driven, poorly indexed, or hides views behind tabs/carousels, use the available Browser skill. Follow its surface-selection rules, inspect the visible rendered page, open image galleries, switch product-view tabs, and capture the underlying high-resolution image or a faithful screenshot when direct download is unavailable.
+3. If official sources still do not cover a face, search exact-model authorized distributors, refurbishers, used-equipment dealers, auction listings, shopping platforms, review sites, teardown posts, and product videos. Useful queries include the exact PID plus `used`, `for sale`, `listing`, `underside`, `bottom`, `left side`, `right side`, `top`, `rear`, `teardown`, and local-language equivalents.
+4. Shopping and marketplace pages are evidence only when the listing can be tied to the exact model/configuration through a readable badge, PID, chassis layout, or corroborating documentation. Watch for stock family images, seller-combined galleries, replacement parts, damaged units, missing modules, custom stickers, and mismatched front/rear photos.
+5. Cross-check a third-party view against a second independent exact-model source or against verified landmarks/dimensions from official documentation. Record disagreements instead of choosing the cleaner image.
+
+Do not bypass authentication, access controls, anti-bot challenges, or private resources. If one page is blocked, continue with other public official or third-party sources.
+
+## 5. Evidence hierarchy for the new build
 
 Prefer evidence in this order:
 
 1. exact-model official color photos, manuals, 3D viewers, CAD screenshots, product videos, exploded diagrams, and mechanical drawings;
-2. exact-PID official distributor or authorized-reseller photography;
-3. exact-model regulatory filings or reputable used-equipment photos for hidden faces;
-4. family diagrams only as leads, never as conclusive identity evidence.
+2. exact-PID authorized distributor/reseller or vendor-certified refurbisher photography;
+3. exact-model independent retailer, shopping-platform, auction, used-equipment, review, teardown, or video imagery that passes identity and configuration cross-checks;
+4. exact-model regulatory filings and service/parts imagery for hidden faces;
+5. family diagrams only as leads, except for the controlled bottom fallback after search exhaustion.
 
 Use image search only for discovery; open and record the underlying page. Search in English and the vendor's local language when useful.
 
@@ -72,24 +86,49 @@ claimed_model:
 variant:
 view_or_dimension:
 authority: official | authorized | secondary
+source_class: manual | product-page | browser-gallery | retailer | marketplace | auction | used-equipment | video | regulatory | generic-bottom-fallback
+pdf_page_or_figure:
+image_inspection_notes:
 proves:
 limitations:
 ```
 
 For each face, retain at least one exact-configuration color source. A straight photo is preferred; if the face is reconstructed from perspective, retain at least two exact-configuration angles that jointly prove both edges and every major feature. Diagrams may constrain geometry but cannot establish color or material alone.
 
-## 5. Six-face evidence rules
+## 6. Read PDFs and inspect images
+
+Official product evidence is often embedded in datasheets, whitepapers, quick-specs, installation guides, owner's manuals, service manuals, and mechanical PDFs. When a relevant PDF is found:
+
+1. use the available PDF skill;
+2. extract searchable text with `pypdf`/`pdfplumber` for exact dimensions, configuration tables, captions, part numbers, and inclusion notes;
+3. render every relevant page to PNG with the PDF workflow because text extraction does not preserve image/layout meaning;
+4. inspect rendered pages at high/original detail with the image-viewing capability;
+5. crop product views or diagrams only as reference inputs, never as the sole final face-production step;
+6. record PDF URL, document title/version/date, page number, figure/caption, exact PID/configuration, and what the visual proves.
+
+Inspect every downloaded web image, browser screenshot, PDF-page render, shopping image, and user-provided source with the image-viewing capability before accepting it. Check:
+
+- exact model badge/PID and whether the photo is a family stock image;
+- face or camera angle and which adjacent surfaces are visible;
+- installed module/drive/PSU/fan configuration;
+- left/right orientation and readable logo/text;
+- seller stickers, cables, rails, damage, replacement parts, or missing modules;
+- resolution, compression, crop, perspective, watermark, and whether detail survives use as an imagegen reference.
+
+Do not treat filenames, alt text, search thumbnails, PDF text extraction, or seller titles as visual proof without image inspection.
+
+## 7. Six-face evidence rules
 
 Front and rear straight-on images are not enough for a six-sided model.
 
 - **Front/rear:** use exact-model elevations or near-orthogonal photographs. Confirm logo side, port/bay order, rack ears, handles, PSU/riser layout, and model badge.
 - **Left/right:** use exact-model side photos, installation diagrams, rail/cover removal instructions, regulatory label views, or multiple three-quarter images. The two sides may have different vents, labels, latches, or rail slots.
 - **Top:** use top/cover photos, service-manual cover diagrams, or multiple elevated three-quarter views. Confirm seams, cover latches, vents, and raised regions.
-- **Bottom:** use official mechanical drawings, rail/feet diagrams, regulatory photos, or exact-model underside photography. Do not mirror the top, use a generic plain panel, or invent vents. If the underside cannot be verified, the exact-replica task is `BLOCKED`.
+- **Bottom:** search official mechanical drawings, rail/feet diagrams, regulatory photos, videos, service imagery, browser-only galleries, and exact-model third-party/marketplace underside photos. If these searches are documented and still yield no usable bottom evidence, a controlled generic bottom is allowed instead of blocking. Prefer a same-vendor/same-family/same-U underside reference; otherwise use a conservative generic sheet-metal bottom matching verified width, depth, color, and material. Do not copy the top, add branding, labels, vents, feet, holes, rails, or protrusions that are not supported. The fallback must not change any verified side silhouette or three-quarter view.
 
-Three-quarter photos are supporting evidence, not textures to stretch flat. Use multiple exact-configuration angles to resolve silhouette, relief, and feature placement, then create the canonical orthographic face. A face built from insufficient evidence remains `BLOCKED`.
+Three-quarter photos are supporting evidence, not textures to stretch flat. Use multiple exact-configuration angles to resolve silhouette, relief, and feature placement, then create the canonical orthographic face. A front, rear, left, right, or top face built from insufficient evidence remains `BLOCKED`; only the documented bottom fallback is exempt.
 
-## 6. Dimension ledger and inclusion rules
+## 8. Dimension ledger and inclusion rules
 
 Prefer official datasheets, hardware installation guides, mechanical drawings, and regulatory documents. Record the quoted wording and units, then normalize to millimeters without discarding the source value.
 
@@ -123,7 +162,7 @@ Resolve these common ambiguities:
 
 Use official numeric dimensions for the body. Use image measurement only for the relative size and placement of ears or small protrusions, anchored to a verified known dimension. Record the assumption and tolerance.
 
-## 7. Feature-level source matrix
+## 9. Feature-level source matrix
 
 Before generation, create `feature-inventory.csv` with one row per component group. Include exact count, row/column arrangement, left-to-right order, relative size, position, depth/relief, material/color, source URL, and confidence. Cover at minimum:
 
@@ -134,21 +173,21 @@ Before generation, create `feature-inventory.csv` with one row per component gro
 
 Do not summarize a dense face as “ports and vents.” The inventory is the build specification and later the QA checklist.
 
-## 8. Front/rear elevation guidance
+## 10. Front/rear elevation guidance
 
 The reference project [skill-rack-device-assets](https://github.com/AyagawaSeirin/skill-rack-device-assets) supplies the baseline exact-model rules for front/rear transparent PNG assets: preserve variants and branding, use straight orthographic views, retain only real complete rack ears, avoid generic hybrids, and validate transparency/cropping. Apply those principles to this workflow, then add the four other verified faces and final-GLB checks.
 
 When the local `rack-device-elevation-assets` skill is available, read its research and QA references for front/rear-specific work rather than duplicating ad hoc rules.
 
-## 9. Stop conditions
+## 11. Stop conditions
 
 Stop and report the strongest available evidence when:
 
 - the exact PID cannot be distinguished from a family member;
 - the requested module is not tied to a verified host enclosure and installed configuration;
 - official dimensions conflict and the inclusion scope cannot be resolved;
-- a materially visible face lacks exact-model evidence;
+- a materially visible front, rear, left, right, or top face lacks exact-model evidence after Browser and third-party escalation;
 - the requested drive, controller, line-card, or rear configuration is not documented;
 - an official source is access-controlled and cannot be obtained without new authority.
 
-Do not fill any gap with a visually plausible guess. An approximation requested later must be a separately named deliverable and cannot receive an exact-replica `PASS`.
+Do not fill identity-bearing gaps with a visually plausible guess. Missing bottom evidence alone does not block completion: record the searches, use `source_class: generic-bottom-fallback`, keep the bottom conservative and non-identifying, and report `PASS_WITH_BOTTOM_FALLBACK`. Any broader approximation must be a separately named deliverable and cannot receive an exact-replica `PASS`.
