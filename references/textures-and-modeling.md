@@ -28,18 +28,20 @@ For every face:
 1. collect multiple exact-configuration sources from official pages/PDFs and, when needed, Browser-assisted or cross-checked third-party/commerce pages;
 2. download source images and render relevant PDF pages to PNG;
 3. inspect every local input with `view_image` at high/original detail before generation;
-4. label each input role explicitly, for example `Image 1: binding face reference`, `Image 2: binding three-quarter geometry reference`, `Image 3: material/color reference`, `Image 4: technical diagram`;
-5. invoke built-in `image_gen` once for that face, treating the inputs as identity/geometry references and requesting a new exact orthographic face asset;
-6. request a genuinely transparent external background and preserve generated alpha;
-7. inspect the output with `view_image`, compare it to the feature inventory and every binding source, and reject drift;
-8. iterate with one targeted correction while repeating all identity invariants;
-9. copy the selected project-bound output into `views/<face>.png` and record the final prompt, input roles, generation method, and output path.
+4. classify references as `REAL_PHOTO`, `OFFICIAL_RENDER`, `TECHNICAL_DIAGRAM`, or `AI_DERIVATIVE`; AI derivatives cannot be the primary reference;
+5. label each input role explicitly, for example `Image 1: PRIMARY BINDING REAL FACE PHOTO—identity, geometry, material and photographic style`, `Image 2: binding three-quarter geometry reference`, `Image 3: supporting material/color reference`, `Image 4: technical diagram`;
+6. select `SOURCE_LOCKED_GENERATION` when a direct real face photo exists, otherwise `MULTI_REFERENCE_RECONSTRUCTION`, with `GENERIC_BOTTOM_FALLBACK` reserved for the documented bottom exception;
+7. invoke built-in `image_gen` once for that face, requesting a new exact orthographic asset while locking both factual content and the real source's visual style;
+8. request a genuinely transparent external background and preserve generated alpha;
+9. inspect the output with `view_image`, compare it to the primary real photo, feature inventory and supporting sources, and reject factual or style drift;
+10. iterate with one targeted correction while repeating identity and photographic-style invariants;
+11. copy the selected project-bound output into `views/<face>.png` and record the final prompt, source-lock mode, input roles, generation method, and output path.
 
-Use reference-guided `product-mockup` generation for a new orthographic face. An exact source photo may also be an edit target for perspective/background work, but the workflow must still invoke image generation and validate the generated result. Do not prompt from only a model name. Do not use a single freely generated image to infer other faces.
+Use reference-guided `product-mockup` generation for a new orthographic face. When a direct real photograph exists, it is not merely a loose reference: make it Image 1 and explicitly state that its identity, layout, materials, color, surface texture, photographic character and style are binding and must not change. Do not prompt from only a model name. Do not use a single freely generated or earlier AI image to infer other faces.
 
 Use one built-in call per face; do not collapse six different assets into one batch prompt or use `n` as a substitute. The built-in path is the default and supports transparent output. If it is unavailable, explain the explicit CLI fallback and its API-key requirement; use it only if the user confirms.
 
-For third-party photos, exclude seller backgrounds, cables, rails, shipping damage, inventory labels, and non-factory stickers through the reference-guided generation prompt. Do not “clean up” a configuration difference into the requested model. For `GENERIC_BOTTOM_FALLBACK`, feed inspected fallback references to image generation and require a conservative non-identifying underside; never generate a detailed imaginary bottom from text alone.
+For third-party photos, exclude seller backgrounds, cables, rails, shipping damage, inventory labels, and non-factory stickers through the reference-guided generation prompt. Do not “clean up” the product itself, erase real surface character, or turn it into a cleaner CGI/product render. Do not transform a configuration difference into the requested model. For `GENERIC_BOTTOM_FALLBACK`, feed inspected fallback references to image generation and require a conservative non-identifying underside; never generate a detailed imaginary bottom from text alone.
 
 For each view, require:
 
@@ -47,7 +49,7 @@ For each view, require:
 - exact verified feature layout and silhouette, except the documented bottom fallback which must preserve all silhouette-affecting evidence;
 - exact component count, row/column arrangement, spacing, seams, recesses, and protrusions from the feature inventory; a bottom fallback stays intentionally non-identifying rather than inventing detail;
 - neutral lighting, no cast shadow or floor;
-- photoreal source-derived materials with no toon outline, illustration shading, or generic color blocks;
+- the same photographic style and real material character as the primary real photograph: matching color balance, contrast, surface grain, wear, highlight softness and recess shadows;
 - readable factory logo/model text in the source orientation;
 - transparent external background where needed;
 - alpha `255` over all visible chassis pixels, including black vents and ports;
@@ -62,10 +64,10 @@ Asset type: exact rack-device [FACE] texture for GLB
 Input images: [LABEL EACH BINDING REFERENCE AND ROLE]
 Primary request: generate a new exact [FACE] orthographic view of [EXACT PID AND INSTALLED CONFIGURATION] from the binding references
 Scene/backdrop: genuinely transparent background
-Style/medium: photoreal product photography, source-matched materials, not illustration or generic 3D concept art
+Style/medium: SOURCE-LOCKED real product photography; preserve the same photographic style, metal/plastic texture, wear, color balance, contrast, highlight softness and recess shadows as Image 1; not a cleaner CGI/product render, illustration or generic 3D concept art
 Composition/framing: one complete face, perfectly straight-on, no adjacent face, physical ratio [A:B]
-Constraints: preserve [FEATURE INVENTORY]; keep factory logo/text location and orientation; product pixels fully opaque; only verified through-holes transparent; no seller labels, cables, rails, watermark, shadow, pseudo-text, invented parts, mirroring, repetition, or redesign
-Avoid: generic server details, family substitution, vectorized edges, toon shading, fake displays/LEDs/ports, changed component counts
+Constraints: Image 1 is the highest-authority binding identity-and-style reference; preserve [FEATURE INVENTORY]; keep factory logo/text location and orientation; product pixels fully opaque; only verified through-holes transparent; no seller labels, cables, rails, watermark, cast shadow, pseudo-text, invented parts, mirroring, repetition, redesign or style change
+Avoid: generic server details, family substitution, CGI cleanup, relighting, beautification, material smoothing, aggressive denoising, color restyling, artificial symmetry, vectorized edges, toon/flat shading, fake displays/LEDs/ports, changed component counts
 ```
 
 ## 3. Preserve physical aspect ratio and resolution

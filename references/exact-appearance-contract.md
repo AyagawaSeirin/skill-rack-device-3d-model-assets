@@ -63,9 +63,28 @@ The approved exact-device web images, inspected PDF-page renders, and third-part
 
 Reference preparation is not the final face-asset workflow. For each canonical face, invoke the `imagegen` skill and built-in image-generation tool using the inspected sources as labeled inputs. Generate one orthographic transparent-background PNG per call. A direct crop or locally removed background alone is insufficient.
 
-Image generation must reconstruct the same real device rather than redesign it. Preserve the identity/feature inventory as invariants. Discard and regenerate an output if it introduces pseudo-text, new ports, decorative indicators, repeated patterns, changed component counts, mirrored branding, invented panel seams, opaque background, transparent chassis pixels, or illustration-like surfaces. Keep the final prompt, input-role list, and selected output path in the evidence/QA record.
+Lock every face to one production mode:
 
-## 5. Controlled generic-bottom fallback
+- `SOURCE_LOCKED_GENERATION`: an exact real photograph of that face exists. Imagegen creates a new orthographic transparent asset, while that photograph remains the binding identity, geometry, material, color, texture, and photographic-style reference.
+- `MULTI_REFERENCE_RECONSTRUCTION`: no usable direct face photo exists; use multiple exact-model real photographs and technical views as binding references.
+- `GENERIC_BOTTOM_FALLBACK`: bottom-only exception after search exhaustion.
+
+Earlier AI generations, GLB renders, preview images, and stylized derivatives cannot outrank real photographs and cannot be the primary identity/style source. Keep a source lock record with paths/URLs and SHA-256 values.
+
+Image generation must reconstruct the same real device in the same photographic character rather than redesign or restyle it. Preserve the identity/feature inventory as invariants. Discard and regenerate an output if it introduces pseudo-text, new ports, decorative indicators, repeated patterns, changed component counts, mirrored branding, invented panel seams, opaque background, transparent chassis pixels, or a different visual style. Keep the final prompt, input-role list, and selected output path in the evidence/QA record.
+
+## 5. Photographic-style lock
+
+Style is factual source data, not a creative choice. Match the primary real photograph's:
+
+- genuine metal, plastic, paint, grille, connector, label, and fastener appearance;
+- color balance, saturation, contrast, highlight softness, and shadow depth within ports/recesses;
+- surface grain, small scratches, wear, stamping, machining, and imperfect real-world texture;
+- camera/product-photography character without converting it to a clean CGI render.
+
+The generated face may become orthographic and transparent, but must not become a different representation style. Reject 3D-render polish, game-asset shading, vectorized edges, painted texture, toon/flat shading, aggressive denoising, artificial symmetry, relighting, beautification, material smoothing, or a “cleaner modern product shot.” `Photorealistic` alone is too weak; prompts must say `same photographic style and real material character as the primary binding photograph` and enumerate the locked traits.
+
+## 6. Controlled generic-bottom fallback
 
 Use this exception only when all of the following are true:
 
@@ -79,7 +98,7 @@ Select fallback reference material in this order: same model family, same vendor
 
 Record the source and search log as `GENERIC_BOTTOM_FALLBACK`, keep `bottom.png` for pipeline compatibility, and set final status to `PASS_WITH_BOTTOM_FALLBACK`. This exception applies only to the bottom face and does not relax exactness for geometry, silhouette, or any other face.
 
-## 6. Geometry fidelity rule
+## 7. Geometry fidelity rule
 
 Use geometry wherever a feature creates visible silhouette, parallax, occlusion, seam depth, recess, protrusion, or cast shadow in the target website cameras. This normally includes separate sleds/modules, drive carriers or bay recesses, handles, bezels, rack ears, large ports, fan/PSU blocks, raised covers, and stepped chassis panels.
 
@@ -87,7 +106,7 @@ Fine flush printing may remain in a texture. Dense perforation may use geometry,
 
 A single beveled cuboid with six decorative planes is forbidden when source views show multi-part construction or relief.
 
-## 7. Allowed and forbidden web optimization
+## 8. Allowed and forbidden web optimization
 
 Allowed when reference renders remain unchanged:
 
@@ -106,15 +125,18 @@ Forbidden:
 - replacing photo-real color with vector, toon, cel-shaded, or flat-color art;
 - reducing texture resolution until labels, hole edges, grilles, or port structure become synthetic.
 
-## 8. Immediate rejection conditions
+## 9. Immediate rejection conditions
 
 Reject before delivery if any view shows:
 
 - a generic server shape unrelated to the exact source;
+- a correct real face photo existed but an AI-generated/stylized derivative was selected instead of a source-locked result;
+- an earlier AI output or GLB render was treated as the primary style reference over a real photograph;
 - wrong module/sled/drive count or nonexistent assembly;
 - invented controls, displays, ports, labels, LEDs, or branding;
 - copied/mirrored left-right layouts or a bottom copied from the top; a documented conservative generic-bottom fallback is allowed, but never a mirrored top;
 - cartoon outlines, flat illustration shading, exaggerated bevels, or artificial color blocks;
+- CGI cleanup, relighting, beautification, smoothing, denoising, color restyling, or any other departure from the primary real photograph's visual character;
 - large blank panels where the real device has distinct mechanical structure;
 - texture-only details that should create visible depth in a three-quarter view;
 - a result that cannot be paired feature-for-feature with the identity inventory.

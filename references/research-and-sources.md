@@ -87,6 +87,8 @@ variant:
 view_or_dimension:
 authority: official | authorized | secondary
 source_class: manual | product-page | browser-gallery | retailer | marketplace | auction | used-equipment | video | regulatory | generic-bottom-fallback
+visual_origin: real-photograph | official-render | technical-diagram | AI-generated-derivative
+primary_identity_style_reference: yes | no
 pdf_page_or_figure:
 image_inspection_notes:
 proves:
@@ -117,7 +119,21 @@ Inspect every downloaded web image, browser screenshot, PDF-page render, shoppin
 
 Do not treat filenames, alt text, search thumbnails, PDF text extraction, or seller titles as visual proof without image inspection.
 
-## 7. Six-face evidence rules
+## 7. Lock primary real sources before generation
+
+Create `face-source-lock.csv` with:
+
+```text
+face,production_mode,primary_source_path,primary_source_url,sha256,
+visual_origin,exact_pid_configuration,locked_visual_traits,
+supporting_source_paths,final_output_path
+```
+
+Use `SOURCE_LOCKED_GENERATION` when a usable direct real photograph of that face exists. That photograph is the highest-authority reference for both device facts and photographic style. Use `MULTI_REFERENCE_RECONSTRUCTION` only when no direct face photograph exists, and use `GENERIC_BOTTOM_FALLBACK` only under its documented rules.
+
+Do not promote an earlier AI-generated image, processed texture, GLB render, preview, reseller illustration, CAD-looking render, or search thumbnail over an exact real photograph. Preserve such assets only as rejected derivatives or supporting geometry leads, never as primary identity/style evidence.
+
+## 8. Six-face evidence rules
 
 Front and rear straight-on images are not enough for a six-sided model.
 
@@ -128,7 +144,7 @@ Front and rear straight-on images are not enough for a six-sided model.
 
 Three-quarter photos are supporting evidence, not textures to stretch flat. Use multiple exact-configuration angles to resolve silhouette, relief, and feature placement, then create the canonical orthographic face. A front, rear, left, right, or top face built from insufficient evidence remains `BLOCKED`; only the documented bottom fallback is exempt.
 
-## 8. Dimension ledger and inclusion rules
+## 9. Dimension ledger and inclusion rules
 
 Prefer official datasheets, hardware installation guides, mechanical drawings, and regulatory documents. Record the quoted wording and units, then normalize to millimeters without discarding the source value.
 
@@ -162,7 +178,7 @@ Resolve these common ambiguities:
 
 Use official numeric dimensions for the body. Use image measurement only for the relative size and placement of ears or small protrusions, anchored to a verified known dimension. Record the assumption and tolerance.
 
-## 9. Feature-level source matrix
+## 10. Feature-level source matrix
 
 Before generation, create `feature-inventory.csv` with one row per component group. Include exact count, row/column arrangement, left-to-right order, relative size, position, depth/relief, material/color, source URL, and confidence. Cover at minimum:
 
@@ -173,13 +189,13 @@ Before generation, create `feature-inventory.csv` with one row per component gro
 
 Do not summarize a dense face as “ports and vents.” The inventory is the build specification and later the QA checklist.
 
-## 10. Front/rear elevation guidance
+## 11. Front/rear elevation guidance
 
 The reference project [skill-rack-device-assets](https://github.com/AyagawaSeirin/skill-rack-device-assets) supplies the baseline exact-model rules for front/rear transparent PNG assets: preserve variants and branding, use straight orthographic views, retain only real complete rack ears, avoid generic hybrids, and validate transparency/cropping. Apply those principles to this workflow, then add the four other verified faces and final-GLB checks.
 
 When the local `rack-device-elevation-assets` skill is available, read its research and QA references for front/rear-specific work rather than duplicating ad hoc rules.
 
-## 11. Stop conditions
+## 12. Stop conditions
 
 Stop and report the strongest available evidence when:
 

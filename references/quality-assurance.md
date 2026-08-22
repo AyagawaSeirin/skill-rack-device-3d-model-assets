@@ -7,6 +7,7 @@ The actual exported model is the product. Preview PNGs and pipeline reports are 
 Do not start mesh work until all of these exist and are `VERIFIED`:
 
 - `identity-manifest.md` identifies the exact delivery subject, host/module relationship, installed module count, backplane/drive option, rear option, bezel/blanking state, and power/fan configuration;
+- `face-source-lock.csv` identifies each face's production mode, primary real source, SHA-256, source classification, locked visual traits, and final output;
 - every major row in `feature-inventory.csv` has an exact count, layout, depth/relief, material, and source;
 - front, rear, left, right, and top have exact-configuration color and geometry evidence; bottom has exact evidence or a completed, documented `GENERIC_BOTTOM_FALLBACK` search log;
 - relevant official PDFs have been text-extracted, their applicable pages rendered, and those page images visually inspected;
@@ -21,14 +22,18 @@ For each of `front.png`, `rear.png`, `left.png`, `right.png`, `top.png`, and `bo
 
 - a generation record identifying built-in `image_gen` as the normal method, or an explicitly user-approved fallback;
 - the final prompt and labeled input-reference roles;
+- `SOURCE_LOCKED_GENERATION` when a usable direct real face photograph exists; `MULTI_REFERENCE_RECONSTRUCTION` only when it does not;
+- the highest-authority primary reference is a real exact-device photograph, never an earlier AI generation, GLB render, or stylized derivative when a real photo exists;
 - confirmation that each local/web/PDF-page reference was visually inspected before use;
 - a genuinely transparent external background;
 - product surface alpha `255` except verified through-holes;
 - exact component counts, positions, orientation, branding, and physical aspect ratio;
 - no seller labels, background, shadow, cables, rails, pseudo-text, invented detail, family substitution, mirroring, or illustration drift;
-- side-by-side visual comparison against every binding source at high/original detail.
+- matching photographic style and real material character: color balance, contrast, metal/plastic grain, wear, highlight softness, recess shadows, edge character and label/port realism;
+- no CGI cleanup, relighting, beautification, smoothing, artificial symmetry, denoising, color restyling, toon/flat/vector treatment, or other source-style drift;
+- side-by-side visual comparison against the primary real photograph and every supporting source at high/original detail.
 
-A simple crop, chroma-key, local cutout, or PDF screenshot without a recorded imagegen step does not satisfy the face-generation gate. Regenerate with the binding references.
+A simple crop, chroma-key, local cutout, or PDF screenshot without a recorded imagegen step does not satisfy the face-generation gate. Conversely, a generated image that changes the real source's photographic style also fails. Regenerate with the real photo locked as both identity and style authority.
 
 ## 3. Run structural audits
 
@@ -111,11 +116,13 @@ For a generic bottom fallback, use the approved fallback image as the comparison
 ### UV and texture
 
 - all six approved views are present in the GLB;
+- the textures extracted from the actual GLB are the approved source-locked face assets, not an older generated/stylized intermediate;
 - physical face ratios are preserved without squeezing or padding artifacts;
 - text and logo are readable and located on the correct side;
 - no mirror, rotation, face swap, repeat, seam discontinuity, or atlas bleed;
 - sufficient resolution remains in the embedded web asset, not only in `views/`.
 - no pseudo-text, invented displays/LEDs, decorative ports, repeated AI patterns, vectorized surfaces, toon outlines, posterization, or flat illustration shading;
+- no visual-style departure from primary real photographs, including CGI rendering, different lighting treatment, smoothed materials, artificial cleanliness, recoloring or game-asset appearance;
 - front/rear and three-quarter overlays show no unmatched large panel, missing module, wrong relief, or shifted feature group.
 - when used, `bottom.png` is recorded as `GENERIC_BOTTOM_FALLBACK`, matches the verified width:depth/material, contains no unsupported branding or mechanical detail, and does not copy the top.
 
@@ -144,6 +151,8 @@ Return `REWORK`, not a warning, when the result:
 - represents a module as a nonexistent standalone chassis or combines incompatible front and rear configurations;
 - replaces real mechanical structure with large blank rectangles, flat icon-like ports, fake screens, or decorative labels;
 - looks illustrated, cartoon-like, cel-shaded, or heavily vectorized compared with official product photography;
+- uses a stylized/generated face although a correct real photograph was collected and available as the primary reference;
+- preserves approximate layout but changes the source photograph's materials, lighting character, surface texture, color balance or realism;
 - cannot be mapped one-to-one to the visible-feature inventory.
 
 A conservative bottom that satisfies the documented fallback is not an immediate rejection and completes as `PASS_WITH_BOTTOM_FALLBACK`, not ordinary `PASS`.
@@ -175,6 +184,7 @@ Repair at the earliest defective layer:
 - visible component counts/layout wrong → rebuild from the feature inventory; do not clone or mirror repeated patterns to fill space;
 - dimensions ambiguous → resolve body/overall inclusion rules;
 - face image invented, merely cropped, or compressed → visually inspect the original web/PDF references and regenerate through built-in imagegen at the correct ratio with transparent background;
+- correct real face photo exists but final generated material has another style → discard that generated texture as a final/reference asset, set the real photograph as primary identity-and-style authority, and regenerate in `SOURCE_LOCKED_GENERATION` with explicit no-restyle constraints;
 - bottom reference unavailable after ordinary search → inspect dynamic galleries with Browser, search/cross-check third-party commerce sources, then use the controlled generic-bottom fallback if still unresolved;
 - cutout damaged → edit from the original source with reference-preserving image generation;
 - GLB mirrored with correct PNG → repair UVs/transforms only;
@@ -194,6 +204,7 @@ For a batch, publish a row for every requested model with `PASS`, `PASS_WITH_BOT
 - every modular model has a verified installed-assembly manifest;
 - every feature-inventory row is matched in actual-GLB renders;
 - every face has a final imagegen prompt/input record and inspected transparent PNG output;
+- every face has a valid source-lock mode and no real photograph has been outranked by an AI derivative;
 - standard/web GLBs have both been checked when both are delivered;
 - structural audit has no unresolved error;
 - every newly built GLB has multi-angle render evidence;

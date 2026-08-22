@@ -44,14 +44,26 @@ configuration, face/angle, orientation, seller changes, crop and resolution.
 Record the source URL, PDF page/figure when applicable, visual findings and the
 role each image will have in GPT image generation.
 
+Create face-source-lock.csv before generation. For each face classify sources as
+real photo, official render, technical diagram or AI derivative. Select
+SOURCE_LOCKED_GENERATION whenever a usable direct real face photograph exists;
+that photograph must be Image 1 and the binding authority for device identity,
+layout, materials, color, surface texture, photographic character and visual style.
+Use MULTI_REFERENCE_RECONSTRUCTION only when no direct real face photo exists.
+Never let an earlier AI image or GLB render outrank a real photograph.
+
 Use the imagegen skill and built-in image_gen tool to generate six separate
 high-resolution photoreal orthographic transparent-background assets, one call
 per face. Use the inspected online images and PDF-page views as explicitly labeled
 binding references. Do not stop after cropping, perspective correction or local
 background removal. Preserve real branding, text, counts, order, materials and
-relief. Reject and regenerate pseudo-text, invented screens/LEDs/ports, repeated
-AI patterns, vector art, toon outlines, flat illustration, opaque background,
-transparent chassis pixels or any redesign. Only real through-holes may be transparent.
+relief. Generate the same real photographic style as the primary photo—not merely
+a generally photorealistic image. Preserve its metal/plastic texture, wear, color
+balance, contrast, highlight softness and recess shadows. Reject and regenerate
+pseudo-text, invented screens/LEDs/ports, repeated AI patterns, CGI cleanup,
+relighting, beautification, material smoothing, denoising, recoloring, artificial
+symmetry, vector/toon/flat illustration, opaque background, transparent chassis
+pixels or any redesign. Only real through-holes may be transparent.
 
 If exact bottom imagery remains unavailable after official, Browser-assisted and
 third-party searches, choose the closest conservative generic-bottom references,
@@ -72,32 +84,42 @@ and all authoritative three-quarter views in two independent viewers. Create
 matched-camera side-by-side, overlay and difference sheets. Verify every feature
 inventory row, readable text, correct ears/holes, exact world proportions,
 photo-real materials, and no missing or invented visible part. Deliver identity
-manifest, evidence, feature inventory, six views, GLBs, QA renders/comparisons,
+manifest, face-source-lock.csv, evidence, feature inventory, six views, GLBs, QA renders/comparisons,
 imagegen prompts/input roles, PASS/PASS_WITH_BOTTOM_FALLBACK/REWORK/BLOCKED report,
 and separate backup links for official 3D files found.
 ```
 
-## Six-face source-preserving image edit
+## Source-locked face image generation
 
 ```text
 Use the imagegen skill and built-in image_gen tool. Generate this face in one
 dedicated call; do not use a local crop/cutout as the final deliverable.
+
+Production mode: [SOURCE_LOCKED_GENERATION when a usable direct real face photo
+exists; otherwise MULTI_REFERENCE_RECONSTRUCTION]. Generation is required and
+allowed; changing the source's visual style is forbidden.
 
 Create the exact [FACE] orthographic texture for [MANUFACTURER] [FULL PID]
 [INSTALLED CONFIGURATION], using the attached exact-device official photos,
 technical drawings and three-quarter views as binding references. This is not a
 generic, same-family or freely redesigned equipment image.
 
-Input images: [IMAGE 1: BINDING FACE REFERENCE; IMAGE 2: BINDING THREE-QUARTER
-GEOMETRY REFERENCE; IMAGE 3: MATERIAL/COLOR REFERENCE; IMAGE 4: RENDERED PDF
-TECHNICAL VIEW]. Every input was visually inspected before use.
+Input images: [IMAGE 1: PRIMARY BINDING REAL PHOTOGRAPH—direct face photo when
+available, otherwise the highest-authority exact-device angle; highest authority
+for identity, layout, material, color, texture and photographic style; IMAGE 2:
+BINDING THREE-QUARTER GEOMETRY REFERENCE; IMAGE 3: SUPPORTING REAL MATERIAL/COLOR
+REFERENCE; IMAGE 4: RENDERED PDF TECHNICAL VIEW]. Every input was visually
+inspected. AI derivatives are not binding sources.
 
 Verified feature inventory for this face: [ENUMERATE EVERY COMPONENT GROUP,
 COUNT, ROW/COLUMN LAYOUT, LEFT-TO-RIGHT ORDER, SIZE, POSITION, DEPTH AND MATERIAL].
 
-Preserve the real face rather than beautifying or redesigning it. Prefer source
-rectification and compositing. Do not convert it into vector art, illustration,
-toon shading, a cleaner generic product render or a symmetrical repeated layout.
+Generate a new orthographic transparent asset while preserving the real face and
+the same photographic style as Image 1. Keep its metal/plastic material texture,
+surface grain, wear, color balance, contrast, highlight softness, edge character
+and recess shadows. Do not beautify, relight, smooth, denoise, recolor or convert
+it into CGI, game art, vector art, illustration, toon shading, a cleaner generic
+product render or a symmetrical repeated layout.
 Do not invent pseudo-text, screens, indicators, LEDs, labels, ports, vents, seams,
 handles, feet, holes, blanking panels or modules.
 
@@ -113,7 +135,8 @@ stop instead of inventing it.
 
 Before accepting, compare exact counts and left-to-right order against the feature
 inventory. Reject changed seams, simplified relief, missing modules, repeated AI
-patterns or any output that is merely recognizable rather than the same device.
+patterns, or any factual/style drift. “Photorealistic” by itself is insufficient;
+the output must look like the same real server photography, not another visual style.
 ```
 
 ## Bottom fallback image generation
@@ -143,7 +166,8 @@ Repair the actual GLB for [MODEL KEY] without regenerating already approved exac
 view PNGs. The approved views, identity manifest and feature inventory are binding.
 
 Observed defects: [MIRRORED UV / FALSE REAR EARS / TRANSPARENT BODY / GRAY MATERIAL
-/ GENERIC OR ILLUSTRATED APPEARANCE / WRONG ASSEMBLY OR COMPONENT COUNT /
+/ CORRECT REAL PHOTO FOUND BUT STYLIZED GENERATED TEXTURE USED /
+GENERIC OR ILLUSTRATED APPEARANCE / WRONG ASSEMBLY OR COMPONENT COUNT /
 COMPRESSED EMBEDDED TEXTURE / WRONG DIMENSIONS / OTHER]. Diagnose the earliest
 defective layer: assembly identity, source, texture, UV, transform, visible
 geometry, material, color space or bounds.
@@ -151,6 +175,11 @@ geometry, material, color space or bounds.
 If the existing result is generic, illustrated or based on the wrong assembly, do
 not polish or retain its box mesh. Lock the correct host/module/backplane identity,
 return to original exact-device photos and rebuild the complete visible exterior.
+
+If a correct real photo was collected but a differently styled AI image was used,
+discard the AI texture as the final/reference source. Set the real photo as Image 1
+and regenerate in SOURCE_LOCKED_GENERATION, locking both factual details and its
+real photographic style. Do not merely ask for “more photorealistic.”
 
 If the source views are correct, fix UV orientation instead of flipping them.
 Remove rear-ear geometry unless exact evidence proves it. Make face/body materials
@@ -180,10 +209,15 @@ official sources to Browser-assisted galleries and cross-checked third-party
 commerce sources. Allow only the documented generic-bottom fallback. Record
 official 3D files as optional backups.
 
+For each face, require face-source-lock.csv and prefer real photographs over every
+AI derivative. Generated assets are allowed, but must retain the primary real
+photo's style, materials, color, surface character and factual layout without drift.
+
 Global gates: no mirrored logo/text; no rear ears inferred from perspective; no
 generic ears; all main surfaces opaque; only real holes transparent; no visible
 interior; no generic-box, stylized, illustrated, vectorized or AI-invented
-appearance; exact module/bay/port/PSU/fan counts and relief; no stretching; correct
+appearance; no CGI/relighting/beautification/material smoothing when real photos
+show another style; exact module/bay/port/PSU/fan counts and relief; no stretching; correct
 assembly dimensions; matched-camera source comparisons; and actual GLB QA in two
 viewers. Output a per-file PASS/PASS_WITH_BOTTOM_FALLBACK/REWORK/BLOCKED table and
 continue until every repair passes exact feature comparison, uses the documented

@@ -1,4 +1,4 @@
 interface:
   display_name: "Rack Device 3D Assets"
   short_description: "Build exact-appearance GLBs from real-device evidence"
-  default_prompt: "Use $skill-rack-device-3d-model-assets to research a verified rack-device configuration, generate six transparent reference-guided face assets with GPT imagegen, and build and validate its exact-appearance GLB."
+  default_prompt: "Use $skill-rack-device-3d-model-assets to research a verified rack-device configuration, generate six source-locked transparent face assets that preserve real photographic style, and build and validate its exact-appearance GLB."
