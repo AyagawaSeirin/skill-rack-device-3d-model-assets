@@ -1,97 +1,51 @@
 ---
 name: skill-rack-device-3d-model-assets
-description: Research, create, repair, and validate exact-appearance web-ready GLB/GLTF replicas of specific rack-device models and installed configurations from authoritative dimensions and multi-angle visual evidence. Use for servers, storage, switches, routers, firewalls, and modular chassis; do not use for generic concept art, stylized approximations, or engineering/internal CAD.
+description: Research, build, repair, and verify editable photorealistic 3D exterior models of specific rack servers, storage systems, switches, routers, and firewalls. Use for evidence-based Blender and GLB assets, real rack hardware, ports and bays, PBR materials, and export defects; not for flat elevation PNGs alone, generic concept art, or manufacturing CAD.
 ---
 
-# Rack Device 3D Model Assets
+# 机架设备写实 3D 资产
 
-Build a new website-ready **exact exterior replica** whose visible geometry, installed configuration, proportions, six faces, orientation, materials, branding, and rack hardware match the real device. “Web-ready” permits performance optimization; it never permits visual simplification. A polished, plausible, or same-family approximation is a failure.
+把有依据的设备外观做成可编辑、有厚度和真实接口结构的模型。实物资料决定型号与结构，三维渲染用于验证表达效果；端口数量和包围盒正确，并不等于外观合格。不要承诺未经测量的“完全一致”或制造精度。
 
-## Route the work
+## 按任务读取
 
-- For source research, optional official-model discovery, six-face evidence, variants, and dimension interpretation, read [references/research-and-sources.md](references/research-and-sources.md).
-- Before modeling, read [references/exact-appearance-contract.md](references/exact-appearance-contract.md) and satisfy its assembly-identity and visible-feature gates.
-- For canonical transparent face generation, coordinate conventions, rack ears, mesh construction, UVs, materials, and optimization, read [references/textures-and-modeling.md](references/textures-and-modeling.md). Canonical face assets require the `imagegen` skill and built-in image generation path.
-- When official whitepapers, datasheets, installation guides, manuals, or other PDFs are sources, use the `pdf` skill to extract text and render relevant pages, then inspect those page images with the available image-viewing capability.
-- For inspection, repair, viewer diagnosis, and final acceptance, read [references/quality-assurance.md](references/quality-assurance.md).
-- When the user needs a reusable or one-round repair instruction, read [references/prompt-templates.md](references/prompt-templates.md).
-- For front/rear elevation-specific source handling, also apply the exact-model invariants from the installed `rack-device-elevation-assets` skill when available. This skill extends that workflow to all six faces and the final GLB.
+- 新建模型或配置有疑问：先读 [证据与尺寸](references/evidence-and-dimensions.md)。
+- 制作实体、接口、标识或修复材质：读 [几何与材质](references/geometry-and-materials.md)。
+- 使用 Blender MCP、真实桌面或执行模型验收：读 [执行与验证](references/execution-and-verification.md)。
+- 保存、导出、瘦身、归档或提交：读 [交付与 Git](references/delivery-and-git.md)。
 
-For an end-to-end build or batch, read all five references before producing final assets.
+小范围返工沿用已核实的配置和资料，只复查受影响的结构、导出与预览。不要为了修一个标签重启整套搜索和生图流程。
 
-## Non-negotiable invariants
+## 从证据到模型
 
-1. Resolve the exact manufacturer, full product identifier, generation suffix, U height, physical variant, and **delivery subject** before searching. Family photos and nearby model numbers are not interchangeable.
-2. For modular systems, resolve the complete assembly: enclosure/host chassis, node or sled model, installed node count and positions, front backplane/drive option, rear module option, bezel state, blanking panels, and power/fan configuration. A module model name alone does not define a rack-level appearance.
-3. The primary deliverable is a newly constructed exact-appearance model. Search for a public official 3D download or viewer, but report it only as an optional backup/source reference unless the user explicitly asks to use it.
-4. Escalate source research instead of stopping at ordinary official-domain search. When pages are interactive, script-rendered, gallery-driven, or poorly indexed, use the available Browser skill to inspect the rendered page and image galleries. When official imagery is insufficient, search exact-model authorized resellers, refurbishers, used-equipment sellers, auction sites, shopping platforms, and other third-party pages, then cross-check configuration and provenance.
-5. Build from authoritative dimensions and exact-model/configuration evidence for **front, rear, left, right, top, and bottom**. Reconstruct a face only when multiple exact-device sources jointly prove visible features. The sole evidence exception is the controlled generic-bottom fallback defined in the references after official, interactive-browser, and third-party searches are exhausted.
-6. Create a visible-feature inventory before modeling. Counts, rows/columns, sizes, positions, colors, recess/protrusion, and source evidence must be exact for drive bays, sleds, PSUs, fans, ports, grilles, handles, latches, screws, seams, labels, and blanking panels.
-7. Record body width, overall width, height, depth, and protrusions separately. State whether published dimensions include rack ears, handles, bezel, cable-management parts, power supplies, or rear handles. Never scale from a maximum-installation or shipping dimension without checking its scope.
-8. Treat PDFs as both textual and visual evidence. Use PDF text extraction for dimensions/configuration and render the relevant pages to images for diagrams and product views; inspect those images rather than relying on extracted text, filenames, captions, or thumbnails alone.
-9. Inspect every downloaded photo, screenshot, PDF-page render, and user-provided image at high/original detail with the image-viewing capability. Classify exact PID, installed configuration, face/angle, visible adjacent faces, resolution, cropping, seller modifications, and what the image actually proves before using it.
-10. Create `source/face-source-lock.csv` before image generation. For each face record its production mode, primary real photographic reference, URL/local path, SHA-256, exact configuration, supporting references, locked visual traits, and final output. Mark sources as real photo, official render, diagram, or AI derivative.
-11. Never use an earlier AI-generated face, prior GLB texture, preview render, or processed stylized derivative as the primary source when a real exact-device photograph exists. Generated assets may be defect examples only, not identity or style evidence.
-12. When an exact usable face photograph exists, production mode is `SOURCE_LOCKED_GENERATION`. Use that real photo as the primary binding reference for identity, layout, material, color, surface texture, photographic character, and style while imagegen creates the new orthographic transparent asset. Generation is required and allowed; style transformation is not.
-13. `SOURCE_LOCKED_GENERATION` may change camera projection, external background, crop, and remove clearly non-factory surroundings, but it must preserve the real server's component counts/order, proportions, labels, logos, ports, metal/plastic texture, wear, color balance, highlight softness, shadows within recesses, and overall real product-photography appearance.
-14. Only when no usable direct face photograph exists may production mode be `MULTI_REFERENCE_RECONSTRUCTION`, using multiple inspected exact-model real photos. The controlled bottom exception uses `GENERIC_BOTTOM_FALLBACK`. Make one built-in imagegen call per face and preserve genuine external transparency.
-15. Generated face assets must remain in the same real photographic style as the primary reference, not merely satisfy a generic “photorealistic” adjective. Reject and regenerate CGI/product-render cleanup, illustration, toon/flat shading, relighting, beautification, symmetry correction, material smoothing, color restyling, denoising that erases texture, pseudo-text, invented displays/LEDs/ports, changed counts, or repeated AI patterns.
-16. Every externally visible part that affects silhouette, depth, seam, shadow, or parallax in approved three-quarter views must exist as correctly placed geometry or faithful relief. Do not deliver a beveled box with six decorative images when the real product has separate sleds, bays, handles, bezels, panels, or recesses.
-17. Treat rack ears as separate mechanical parts. Front ears exist only when exact evidence confirms them. A rear photograph that sees the front ears in perspective does not prove rear ears.
-18. Prefer geometric cutouts for rack-ear holes. If alpha is used, isolate it to the ear material and keep anti-aliased hole edges high resolution. Never globally delete colors that also occur on the chassis.
-19. All six visible equipment surfaces are opaque. Dark vents and ports are dark pixels or geometry, not transparency. Use transparency only for real open holes or the external transparent canvas around the face asset.
-20. Preserve logos, readable labels, component order, counts, colors, and left/right placement. Do not mirror a face. Text must read normally in the final GLB, not merely in the generated PNG.
-21. Preserve every face's physical aspect ratio. Do not force six images to one canvas ratio, stretch compressed previews, or reduce texture resolution until identifying details disappear.
-22. Use a closed outward-facing mesh with consistent normals. Do not expose an empty interior. Do not omit visible drives, fans, PSUs, sled fronts, handles, or bezels merely because they are removable.
-23. Use source-matched materials without toon outlines, flat illustration shading, exaggerated bevels, synthetic color blocks, or a generated visual style. Use sRGB base-color textures with neutral factors; choose unlit or PBR only after matching reference renders.
-24. Optimize only invisible internals, redundant topology, compression, and file packaging. The standard and web GLBs must retain the same externally visible form and source-photograph appearance.
-25. Validate the actual GLBs in at least two independent viewers. Compare matched-camera renders against the locked primary real sources using side-by-side, overlay, and feature-count review; previews alone cannot pass.
+1. **锁定交付对象。** 区分完整机箱、计算节点、滑橇和可拆模块；记录正式型号后缀、盘位/托架状态、节点数量、PSU 类型、风扇模块、风向颜色及安装耳片。用户指定配置优先于某张商家照片；另找匹配实拍，不把照片里的运输填充件当作正常盘架。
+2. **核对原始资料。** 官方尺寸/安装图与同型号实拍互相补足。实际下载并解码图片/PDF，检查 PDF 图页；把 HTTP 403、低清库存图、重复照片和不同选件分别记录。无法确认的小细节可以标估算；影响型号、数量或安装方案的冲突必须先解决再制作依赖它的部件。
+3. **固定尺度和坐标。** 建立简短尺寸表与参数；区分裸壳、安装基准、含把手总深、耳片外跨和安装空间。新项目默认米制、端口/主要操作面 -Y、背面 +Y、前视右侧 +X、主机身底面中心为原点；已有项目沿用其明确坐标，不擅自翻转。
+4. **按需要生成参考。** 如果用户要求 imagegen，先检查真实输入图，使用当前可用的内置生图能力，按约定独立视角完成审查；要求“先参考后建模”时遵守顺序。生图不能成为尺寸、孔数或印刷文字的权威。未要求时，只在确有帮助的部位使用，不强制为每次修复生成整套六面纹理，也不把六张照片包在盒子上代替实体。
+5. **分组件建模。** 机身钣金、挂耳、盘架/端口笼、管理接口、风扇、电源、锁扣、把手与标识分开组织。重复网格可共享，独立修改先单用户化。尺寸、数量、标签和估算状态应能在模型中查明。
 
-## Required workflow
+资料不足时继续可独立进行的工作。只有影响结果且现有资料无法消除的关键歧义才向用户确认。用户已经授权的常规阶段不反复询问是否继续；技能本身不授予发布、付费服务或删除其他任务文件的权限。
 
-1. Freeze an assembly identity manifest. If the requested installed configuration is ambiguous, mark it `BLOCKED` before image generation or modeling.
-2. Build a source matrix, dimension ledger, and visible-feature inventory. Search official sources first, read/render official PDFs with the PDF skill, use Browser for interactive/dynamic pages, then search and cross-check third-party commerce/marketplace sources.
-3. Preserve downloads unchanged. Render relevant PDF pages, inspect every raster reference, classify real versus AI-derived material, and record URL, page/figure, access date, exact configuration, authority, source class, face/angle, and the feature it proves.
-4. Lock each face to `SOURCE_LOCKED_GENERATION`, `MULTI_REFERENCE_RECONSTRUCTION`, or `GENERIC_BOTTOM_FALLBACK`. If a usable real face photo exists, it must be the primary binding identity-and-style reference and takes precedence over every generated derivative.
-5. Invoke built-in imagegen once per face under its locked mode. Generate a new orthographic transparent asset while explicitly locking the real source's structure, materials, photographic texture, color and style. Reject outputs with any factual or source-style drift.
-6. Build the full visible exterior under the canonical coordinate convention. Keep independently shaped assemblies, ears, handles, body panels, and any alpha-requiring part separable.
-7. Render a draft GLB from the same six orthographic cameras plus matched source-photo three-quarter cameras. Create comparison sheets and repair every unmatched feature or material before optimization.
-8. Run structural audits on six images and both GLBs. Repair the causal layer rather than replacing correct source-locked assets or hiding a bad material with viewer lighting.
-9. Deliver only after source-lineage, exact-appearance, and structural gates pass, with identity, evidence, `face-source-lock.csv`, PDF page references, imagegen edit/generation mode, input roles and final prompts, feature inventory, six transparent PNGs, comparison sheets, QA report, and optional official-file links.
+## 制作中保持的约束
 
-## Working layout
+- 所有影响轮廓、凹凸、遮挡和接口暗腔的结构都应有适当几何。不要用黑矩形代替正常端口，不擅自塞入无依据的光模块、硬盘或防尘塞。
+- 挂耳通孔是真正几何切除，有板厚和连续孔壁。孔可以存在于封闭流形实体中；不要“自动补洞”封死它。金属本体保持不透明，不能靠整体 Alpha 或全局双面隐藏错误。
+- 孔后的螺钉或机身是正常遮挡。只在隔离且无遮挡的测试副本中要求孔中心透明；正式装配按真实命中对象检查。
+- 金属、塑料和织带采用合理 PBR 差异；微纹理按物理尺度设置。中性灯光、色彩管理和工作状态先固定，再判断材料。真实玻璃或透明贴花需要独立材质和依据，不能影响机壳基材。
+- 大平面与倒角/弧面分别处理法线。穿孔板出现星状反光时先查分裂法线，不能一律 Shade Smooth 加 Weighted Normal。
+- 字体、Logo、型号和端口编号按清晰实拍/官方资料校对。无法辨认的小字保持来源分辨率限制，不用 AI 编造序列号、容量或制造商修订。
+- 底面、内部触点等推测结构在对象名或属性及相关预览中标明 `INFERRED`。估算厚度和孔距不能包装成官方制造尺寸。
 
-```text
-<MODEL_KEY>/
-├── source/
-│   ├── originals/          official photos and documents, unchanged
-│   ├── optional-3d/        official 3D files/links found; not the main build
-│   ├── pdf-pages/          rendered relevant PDF pages used as references
-│   ├── third-party/        inspected reseller/marketplace/other images
-│   ├── identity-manifest.md
-│   ├── face-source-lock.csv
-│   ├── feature-inventory.csv
-│   └── evidence.md         URLs, dimensions, configuration, inclusion rules
-├── views/
-│   ├── front.png
-│   ├── rear.png
-│   ├── left.png
-│   ├── right.png
-│   ├── top.png
-│   └── bottom.png
-├── model/
-│   ├── <MODEL_KEY>.glb
-│   └── <MODEL_KEY>-web.glb
-└── qa/
-    ├── audit.json
-    ├── imagegen-prompts/
-    ├── reference/
-    ├── renders/
-    └── comparisons/
-```
+## 验收与修复闭环
 
-Keep failed generations and intermediate crops outside `views/` and `model/`. Never overwrite an official source file.
+先在原模型检查数量、尺度、拓扑、法线、镜像/UV、实体开孔和材料，再独立导入实际导出的 GLB 重复关键检查。GLB 容器正确不证明它有真实孔洞，当前视口正确也不证明保存后纹理仍有效。
 
-## Completion gate
+完整新建通常检查独立六面、四斜视、俯仰角及耳片、接口、品牌、电源/风扇等特写；按设备和用户范围调整。任务要求真实桌面验收时，至少完整环绕并补充近看；脚本相机渲染不能冒充键鼠输入。不能使用同一错误假设同时生成模型和判定“外观通过”，还需要与适用的实物证据对照。
 
-Finish when exact configuration is proven; each face's lineage and mode are recorded; every available exact face photograph remains the primary binding identity-and-style reference; the generated assets preserve the real device's photographic appearance and factual details; every identity-bearing feature is correct; and both GLBs pass source-photo comparisons in two viewers. If a correct real face photo was found but the final generated texture changes its visual style, materials, layout, or device identity, status is `REWORK` regardless of how polished it looks. Non-bottom evidence gaps remain `BLOCKED`; the documented bottom fallback remains the only built-in exception.
+出现问题先定位到来源、几何、法线、UV、材质、照明、采样或执行状态，再修对应层。可见修复后更新受影响预览、重新导出并核对当前文件哈希；不拿旧截图作为新版证明。详细方法和两个只读辅助脚本见 [执行与验证](references/execution-and-verification.md)。
+
+## 默认交付
+
+交付可编辑主 `.blend`、内嵌所需纹理的 `.glb` 和最终各角度 `previews/`。核心配置、尺度、坐标和推测部位写入模型属性。用户需要审计包时再交付资料和过程记录；默认不提交原始下载、失败生图、阶段文件、测试夹具、虚拟环境或庞大 QA 图集。
+
+轻量交付仍需完整验证。删除自己创建的过程目录前，确认模型依赖已打包、GLB 资源内嵌、保留的成品与预览哈希未变，并在外部纹理不可用的状态下重开主文件。已有资料或他人成果的清理以用户授权范围为准。提交/推送和 LFS 按 [交付与 Git](references/delivery-and-git.md) 执行。

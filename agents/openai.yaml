@@ -1,4 +1,4 @@
 interface:
   display_name: "Rack Device 3D Assets"
-  short_description: "Build exact-appearance GLBs from real-device evidence"
-  default_prompt: "Use $skill-rack-device-3d-model-assets to research a verified rack-device configuration, generate six source-locked transparent face assets that preserve real photographic style, and build and validate its exact-appearance GLB."
+  short_description: "制作并验收服务器与网络设备的写实三维模型，交付可编辑成品和各角度预览"
+  default_prompt: "使用 $skill-rack-device-3d-model-assets，依据同型号实拍和官方尺寸制作或修复设备三维模型，检查真实开孔、UV、材质与 GLB 回读，默认只交付最终 Blender、GLB 和各角度预览。"
