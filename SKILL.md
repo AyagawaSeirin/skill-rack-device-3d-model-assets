@@ -1,11 +1,15 @@
 ---
 name: skill-rack-device-3d-model-assets
-description: Research, build, repair, and verify editable photorealistic 3D exterior models of specific rack servers, storage systems, switches, routers, and firewalls. Use for evidence-based Blender and GLB assets, real rack hardware, ports and bays, PBR materials, and export defects; not for flat elevation PNGs alone, generic concept art, or manufacturing CAD.
+description: Research, build, repair, and verify editable photorealistic 3D exterior replicas of specific rack servers, storage systems, switches, routers, and firewalls. Match real-device appearance, reject cartoon or stylized presentation, and default to a supported AC PSU when power configuration is unspecified. Use for evidence-based Blender and GLB assets and export defects; not for flat elevation PNGs alone, generic concept art, or manufacturing CAD.
 ---
 
 # 机架设备写实 3D 资产
 
-把有依据的设备外观做成可编辑、有厚度和真实接口结构的模型。实物资料决定型号与结构，三维渲染用于验证表达效果；端口数量和包围盒正确，并不等于外观合格。不要承诺未经测量的“完全一致”或制造精度。
+**必须采用写实风格，以外观和同型号、同配置的真实设备一模一样为验收目标。** 按实拍逐项复现轮廓、比例、部件布局、钣金厚度、孔洞、接口深度、材料质感、颜色及工厂标识，不能只做一台“看起来像”的设备。
+
+**禁止动画片、卡通、插画、玩具化、低模示意或其他风格化演示外观。** 端口数量和包围盒正确不等于外观合格；偏离实物质感或结构时必须返工，不能因为画面漂亮就接受。转台视频和相机动画只是观察方式，画面中的设备仍须保持写实。
+
+实物资料决定型号与结构，模型保留可编辑组件。已证实的外观应准确复现；资料缺失的部位仍须标注估算或 `INFERRED`，不能伪称已经证实，也不能把外观一致目标等同于未经测量的制造精度。
 
 ## 按任务读取
 
@@ -18,7 +22,7 @@ description: Research, build, repair, and verify editable photorealistic 3D exte
 
 ## 从证据到模型
 
-1. **锁定交付对象。** 区分完整机箱、计算节点、滑橇和可拆模块；记录正式型号后缀、盘位/托架状态、节点数量、PSU 类型、风扇模块、风向颜色及安装耳片。用户指定配置优先于某张商家照片；另找匹配实拍，不把照片里的运输填充件当作正常盘架。
+1. **锁定交付对象。** 区分完整机箱、计算节点、滑橇和可拆模块；记录正式型号后缀、盘位/托架状态、节点数量、PSU 类型、风扇模块、风向颜色及安装耳片。**电源有多种选项而用户未指定时，默认选择该型号支持的 AC 电源**，并锁定有官方/实拍依据的具体样式；不因首先找到 DC 照片就默认 DC，也不混搭不同电源外壳或风向。用户明确指定的电源或装配优先；另找匹配实拍，不把照片里的运输填充件当作正常盘架。
 2. **核对原始资料。** 官方尺寸/安装图与同型号实拍互相补足。实际下载并解码图片/PDF，检查 PDF 图页；把 HTTP 403、低清库存图、重复照片和不同选件分别记录。无法确认的小细节可以标估算；影响型号、数量或安装方案的冲突必须先解决再制作依赖它的部件。
 3. **固定尺度和坐标。** 建立简短尺寸表与参数；区分裸壳、安装基准、含把手总深、耳片外跨和安装空间。新项目默认米制、端口/主要操作面 -Y、背面 +Y、前视右侧 +X、主机身底面中心为原点；已有项目沿用其明确坐标，不擅自翻转。
 4. **按需要生成参考。** 如果用户要求 imagegen，先检查真实输入图，使用当前可用的内置生图能力，按约定独立视角完成审查；要求“先参考后建模”时遵守顺序。生图不能成为尺寸、孔数或印刷文字的权威。未要求时，只在确有帮助的部位使用，不强制为每次修复生成整套六面纹理，也不把六张照片包在盒子上代替实体。
@@ -42,7 +46,7 @@ description: Research, build, repair, and verify editable photorealistic 3D exte
 
 完整新建通常检查独立六面、四斜视、俯仰角及耳片、接口、品牌、电源/风扇等特写；按设备和用户范围调整。任务要求真实桌面验收时，至少完整环绕并补充近看；脚本相机渲染不能冒充键鼠输入。不能使用同一错误假设同时生成模型和判定“外观通过”，还需要与适用的实物证据对照。
 
-出现问题先定位到来源、几何、法线、UV、材质、照明、采样或执行状态，再修对应层。可见修复后更新受影响预览、重新导出并核对当前文件哈希；不拿旧截图作为新版证明。详细方法和两个只读辅助脚本见 [执行与验证](references/execution-and-verification.md)。
+写实外观是单独的验收条件：原版和 Web 版都要与所采用的同配置实拍比较，不能只凭脚本计数或格式通过判定合格。出现问题先定位到来源、几何、法线、UV、材质、照明、采样或执行状态，再修对应层。可见修复后更新受影响预览、重新导出并核对当前文件哈希；不拿旧截图作为新版证明。详细方法和两个只读辅助脚本见 [执行与验证](references/execution-and-verification.md)。
 
 ## 默认交付
 
